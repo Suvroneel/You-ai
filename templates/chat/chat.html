@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}You_AI — Chat{% endblock %}
+{% block content %}
+<div class="chat-page">
+    <header class="chat-header">
+        <h1 class="brand">You_AI</h1>
+        <div class="header-actions">
+            <button hx-post="{% url 'chat:new_chat' %}" hx-target="#message-list" hx-swap="innerHTML" onclick="document.getElementById('message-list').innerHTML=''">New chat</button>
+            <form method="post" action="{% url 'accounts:logout' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="ghost">Log out</button>
+            </form>
+        </div>
+    </header>
+
+    <div id="message-list" class="message-list">
+        {% if not messages %}
+        <div class="empty-state">
+            <p>Hey {{ username }}. This is your space.</p>
+            <p class="muted">Say something and see how it responds.</p>
+        </div>
+        {% endif %}
+        {% for msg in messages %}
+            {% include "chat/_message.html" %}
+        {% endfor %}
+    </div>
+
+    <form class="composer"
+          hx-post="{% url 'chat:send_message' %}"
+          hx-target="#message-list"
+          hx-swap="beforeend"
+          hx-on::after-request="this.reset(); document.getElementById('message-list').scrollTop = document.getElementById('message-list').scrollHeight;">
+        {% csrf_token %}
+        <input type="text" name="message" placeholder="Type something..." autocomplete="off" required>
+        <button type="submit">Send</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+django>=4.2
+python-dotenv
+huggingface-hub>=0.19.0
+
+# --- Future / not yet installed — zero-cost stack for stubs above ---
+# faster-whisper        # voice: speech-to-text, local, free
+# TTS                   # voice: Coqui TTS, local, free
+# opencv-python          # vision: image preprocessing, free
+# pytesseract             # vision: OCR, free (needs Tesseract binary installed)
+# transformers            # vision: local BLIP captioning (already partly used by chat)
+# sentence-transformers   # personality/memory: local embeddings, free
+# psycopg[binary]         # Neon Postgres connection

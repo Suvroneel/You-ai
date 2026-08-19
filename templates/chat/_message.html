@@ -1,0 +1,9 @@
+{% if msg.sender == "user" %}
+<div class="row user-row">
+    <div class="bubble user-bubble">{{ msg.content }}</div>
+</div>
+{% else %}
+<div class="row bot-row">
+    <div class="bubble bot-bubble">{{ msg.content }}</div>
+</div>
+{% endif %}
