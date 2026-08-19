@@ -1,7 +1,10 @@
 django>=4.2
 python-dotenv
 huggingface-hub>=0.19.0
-
+gunicorn>=21.2.0
+whitenoise>=6.6.0
+dj-database-url>=2.1.0
+psycopg[binary]>=3.1.0
 # --- Future / not yet installed — zero-cost stack for stubs above ---
 # faster-whisper        # voice: speech-to-text, local, free
 # TTS                   # voice: Coqui TTS, local, free
