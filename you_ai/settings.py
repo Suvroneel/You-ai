@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "change-me-in-production")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -23,6 +23,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -49,32 +50,37 @@ TEMPLATES = [{
 
 WSGI_APPLICATION = "you_ai.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# --- Database ---
+# Defaults to SQLite for local dev. If NEON_DATABASE_URL is set (e.g. on
+# Render, or locally via .env), it switches to Neon Postgres automatically.
+NEON_DATABASE_URL = os.environ.get("NEON_DATABASE_URL", "")
 
-# --- Neon (Postgres) — PLACEHOLDER, not active yet ---
-# Once chat history / user profiles need to persist beyond the session,
-# swap the "default" DATABASES entry above for this instead of sqlite.
-# Neon gives a standard Postgres connection string, so this is a drop-in
-# swap — no ORM/model changes needed elsewhere.
-#
-# NEON_DATABASE_URL = os.environ.get("NEON_DATABASE_URL", "")
-#
-# DATABASES = {
-#     "default": dj_database_url.parse(NEON_DATABASE_URL)
-#     # requires: pip install dj-database-url psycopg[binary]
-# }
-#
+if NEON_DATABASE_URL:
+    import dj_database_url
+    DATABASES = {
+        "default": dj_database_url.parse(NEON_DATABASE_URL, conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
 # pgvector (for personality/memory embeddings, see roadmap section 3)
 # is supported natively on Neon — no separate vector DB needed once
 # that work starts.
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/chat/"
