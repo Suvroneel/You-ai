@@ -33,6 +33,10 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
+    background-image: url('/static/images/diana-polekhina-1vBa-CGfl9A-unsplash.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 .auth-card {
     width: 100%;
