@@ -2,7 +2,8 @@
 
 ### *The self, extended.*
 
----
+<img width="1920" height="1280" alt="YOU Ai" src="https://github.com/user-attachments/assets/7b558f1b-cfc5-4c90-93c4-1af78d7d4e9c" />
+
 
 ## Philosophy
 
