@@ -69,7 +69,7 @@ else:
     }
 
 # pgvector (for personality/memory embeddings, see roadmap section 3)
-# is supported natively on Neon — no separate vector DB needed once
+# is supported natively on Neon   no separate vector DB needed once
 # that work starts.
 
 STATIC_URL = "/static/"
@@ -91,5 +91,5 @@ TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-# HuggingFace (GenAI backend — same as Phynix, Llama 3.1)
+# HuggingFace (GenAI backend   same as Phynix, Llama 3.1)
 HF_TOKEN = os.environ.get("HF_TOKEN", "")

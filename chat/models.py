@@ -1,9 +1,9 @@
 from django.db import models
 
-# --- Neon table placeholders — not migrated, not active yet ---
+# --- Neon table placeholders   not migrated, not active yet ---
 #
 # Right now chat history lives in request.session only (see chat/views.py).
-# These are commented out so the schema shape is decided in advance —
+# These are commented out so the schema shape is decided in advance  
 # uncomment + makemigrations once DATABASES points at Neon (see
 # you_ai/settings.py for the connection placeholder).
 

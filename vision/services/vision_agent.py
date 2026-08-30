@@ -1,19 +1,19 @@
 # vision/services/vision_agent.py
 #
-# STUB — not implemented. No logic below, only structure + comments.
+# STUB   not implemented. No logic below, only structure + comments.
 # See YOU_AI_ROADMAP.md section 4 (Multimodal) for context.
 #
 # Purpose:
-#   Lets You_AI "see" — read a shared screenshot/document image, or pull
+#   Lets You_AI "see"   read a shared screenshot/document image, or pull
 #   context out of an uploaded photo, rather than only handling text.
-#   Exact use case still needs to be narrowed down (see roadmap doc) —
+#   Exact use case still needs to be narrowed down (see roadmap doc)  
 #   this stub covers the most likely first use case: reading images the
 #   user shares, e.g. a screenshot of a message they want a reply to.
 #
 # Zero-cost approach:
 #   - OpenCV (opencv-python) for any actual image preprocessing
-#     (cropping, resizing, basic detection) — fully free, local.
-#   - Text extraction from images: pytesseract (Tesseract OCR) — free,
+#     (cropping, resizing, basic detection)   fully free, local.
+#   - Text extraction from images: pytesseract (Tesseract OCR)   free,
 #     local, no API cost.
 #   - Image captioning / "what's in this image": a small local model
 #     (e.g. BLIP via transformers, runs on CPU slowly but free) instead
@@ -22,7 +22,7 @@
 
 # def preprocess_image(image_file):
 #     """
-#     Basic OpenCV preprocessing — resize, grayscale, denoise — before
+#     Basic OpenCV preprocessing   resize, grayscale, denoise   before
 #     handing off to OCR or a captioning model.
 #     """
 #     pass
@@ -40,7 +40,7 @@
 # def describe_image(image_file) -> str:
 #     """
 #     Local image captioning (BLIP or similar small model) for cases
-#     where the image isn't text-heavy — e.g. "what does this look like".
+#     where the image isn't text-heavy   e.g. "what does this look like".
 #     Lower priority than extract_text_from_image() for the core use case.
 #     """
 #     pass

@@ -1,7 +1,7 @@
 """
 accounts/views.py
 
-STUB AUTH — deliberately minimal.
+STUB AUTH   deliberately minimal.
 No password, no email verification, no OAuth. Just a name, stored in session.
 
 Real auth (signup flow with the psychological/personality questions that

@@ -1,6 +1,6 @@
 from django.db import models
 
-# --- Neon table placeholder — not migrated, not active yet ---
+# --- Neon table placeholder   not migrated, not active yet ---
 #
 # Current auth is session-only, no user table at all (see accounts/views.py).
 # This is the shape it'll need once real signup replaces the stub, including

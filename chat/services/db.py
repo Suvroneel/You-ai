@@ -1,6 +1,6 @@
 # chat/services/db.py
 #
-# STUB — not implemented. No logic below, only structure + comments.
+# STUB   not implemented. No logic below, only structure + comments.
 #
 # Purpose:
 #   Once DATABASES points at Neon (see you_ai/settings.py) and the models
@@ -17,7 +17,7 @@
 # def save_message(user_id: str, sender: str, content: str):
 #     """
 #     Writes one message row. Called twice per turn from send_message()
-#     in views.py — once for the user's message, once for the reply.
+#     in views.py   once for the user's message, once for the reply.
 #     """
 #     pass
 
