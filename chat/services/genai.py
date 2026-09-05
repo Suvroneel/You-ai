@@ -1,37 +1,25 @@
 """
 chat/services/genai.py
 
-This is where You_AI's replies get generated. Structurally it mirrors
-Phynix's PhynixAI class, but the intent behind it is different: Ashva was
-a companion with its own fixed personality. You_AI is not a companion —
-it's meant to sound like an extension of the person talking to it.
-
-Right now the system prompt is a neutral, adaptive-tone placeholder.
-It nudges the model to mirror the user's own tone back at them (formal,
-sarcastic, blunt, warm, whatever comes through in their messages) rather
-than layering on a separate assistant personality.
-
-# TODO: personality profile injection
-# Once the signup flow collects the psychological/preference questions
-# (nickname, hypothetical-situation answers, values questions, etc.),
-# that profile should be fetched here and folded into SYSTEM_PROMPT as
-# structured context — e.g. "This user tends to be direct and dry, avoid
-# corporate/spong tone, keep replies short." That's a separate research
-# branch (personality modeling) and isn't wired in yet.
+This is where You_AI's replies get generated.
+The system prompt establishes a warm, grounded, and naturally empathetic baseline.
+It acts as a supportive alter-ego that feels human and approachable, designed
+to seamlessly integrate future user personality injections.
 """
+import os
 from django.conf import settings
 from huggingface_hub import InferenceClient
 
 
 class YouAI:
-    BASE_SYSTEM_PROMPT = """You are You_AI, a personal extension of the user — not a companion, not an assistant with its own personality. Your job is to sound like an extension of how THIS person talks and thinks, not like a generic helpful chatbot.
+    BASE_SYSTEM_PROMPT = """You are You_AI — a warm, grounded, and thoughtful personal extension of the user. You speak like a trusted peer and supportive alter-ego, not a cold software tool or a robotic script.
 
-Rules:
-- Mirror the user's tone. If their messages are warm and casual, be warm and casual. If they're blunt, sarcastic, or formal, match that register instead of defaulting to a "helpful assistant" voice.
-- Do not perform empathy or add filler you wouldn't naturally hear from the user's own inner voice.
-- Keep replies proportionate to the user's own message length and energy — don't pad short messages with long responses.
-- Never claim to be human, and never pretend to have memories or context you have not actually been given.
-- No emojis."""
+Core Conversational Principles:
+- **Warmth & Empathy First:** Be naturally approachable, friendly, and empathetic. When the user greets you or shares thoughts, respond with genuine human warmth rather than pushback or sterile detachment.
+- **Relatable & Natural Tone:** Talk naturally and conversationally. Avoid corporate jargon, robotic disclaimers ("As an AI..."), or unnatural artificial enthusiasm.
+- **Proportional Energy:** Match the user's conversational pace. Keep short greetings brief and friendly, and match deeper conversations with thoughtful responses.
+- **Supportive Framing:** Act as a collaborative sounding board. Be encouraging and insightful, helping the user brainstorm, edit, or navigate decisions smoothly.
+- **Authentic Boundaries:** Be open and warm without being fake, overly sycophantic, or performative. Never use emojis."""
 
     def __init__(self):
         # Fallback to standard environment variables if settings.HF_TOKEN is missing
@@ -46,8 +34,7 @@ Rules:
         try:
             system_prompt = self.BASE_SYSTEM_PROMPT
             if personality_context:
-                # TODO: this is the hook described above — currently unused
-                system_prompt += f"\n\n[User personality context: {personality_context}]"
+                system_prompt += f"\n\n[User personality nuances to layer in: {personality_context}]"
 
             messages = [{"role": "system", "content": system_prompt}]
             if chat_history:
