@@ -6,11 +6,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", RedirectView.as_view(pattern_name="chat:chat"), name="root"),
 
-    # django-allauth internal authentication & social callback routes
+    # Allauth URLs (handles /accounts/login/, /accounts/google/login/, callbacks)
     path("accounts/", include("allauth.urls")),
 
-    # Your custom app accounts routes (signup steps, nickname/personality submission)
+    # Custom App accounts URLs (handles /accounts/nickname/ and post-login onboarding)
     path("accounts/", include("accounts.urls", namespace="accounts")),
 
+    # Chat app URLs
     path("chat/", include("chat.urls", namespace="chat")),
 ]

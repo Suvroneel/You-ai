@@ -4,7 +4,7 @@
 # See YOU_AI_ROADMAP.md section 4 (Multimodal) for context.
 #
 # Purpose:
-#   Lets a user talk to You_AI instead of typing, and optionally hear a
+#   Lets a user talk to  You AI instead of typing, and optionally hear a
 #   reply back. Two halves: speech-to-text (in) and text-to-speech (out).
 #
 # Zero-cost approach:
@@ -28,7 +28,7 @@
 
 # def synthesize_speech(text: str) -> bytes:
 #     """
-#     Takes a You_AI text reply and turns it into audio using a local,
+#     Takes a  You AI text reply and turns it into audio using a local,
 #     free TTS engine. Returned bytes get streamed back to the browser
 #     as playable audio.
 #     Not required for MVP   text-only replies are fine at first. This

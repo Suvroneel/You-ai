@@ -1,36 +1,43 @@
-"""
-accounts/views.py
-
-STUB AUTH   deliberately minimal.
-No password, no email verification, no OAuth. Just a name, stored in session.
-
-Real auth (signup flow with the psychological/personality questions that
-will shape each user's GenAI tone) is a separate, larger piece of work and
-gets built later. This exists purely so the chat page has a `username` to
-personalize around.
-"""
 from django.shortcuts import render, redirect
-from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 
-def login_view(request):
-    if request.session.get("username"):
-        return redirect("chat:chat")
-
+@login_required
+def nickname_view(request):
+    """
+    Onboarding step after successful Google OAuth authentication.
+    Captures the user's preferred nickname and stores it in session/user context.
+    """
     if request.method == "POST":
-        name = request.POST.get("name", "").strip()
+        name = (request.POST.get("nickname") or request.POST.get("name") or "").strip()
         if not name:
-            return render(request, "accounts/login.html", {"error": "Enter a name to continue."})
+            return render(
+                request,
+                "accounts/nickname.html",
+                {"error": "Please enter a nickname to continue."}
+            )
 
+        # Store in session for chat personalization
         request.session["username"] = name
         request.session["logged_in"] = True
         request.session.modified = True
-        return redirect("chat:chat")
 
-    return render(request, "accounts/login.html", {})
+        # Attach nickname to user first_name
+        request.user.first_name = name
+        request.user.save(update_fields=["first_name"])
+
+        return redirect("/chat/")
+
+    # If nickname is already set in session, prepopulate or proceed directly
+    existing_name = request.session.get("username", request.user.first_name or "")
+
+    return render(request, "accounts/nickname.html", {"existing_name": existing_name})
 
 
-@require_POST
 def logout_view(request):
-    request.session.flush()
-    return redirect("accounts:login")
+    """
+    Clears both Django user authentication and custom session variables.
+    """
+    logout(request)
+    return redirect("account_login")

@@ -9,7 +9,7 @@ def chat_view(request):
     messages = request.session.get("chat_messages", [])
     context = {
         "messages": messages,
-        "username": request.session.get("username", "there"),
+        "username": request.session.get("username", request.user.first_name or "there"),
     }
     return render(request, "chat/chat.html", context)
 

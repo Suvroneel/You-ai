@@ -1,138 +1,141 @@
-from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
+# Automatically load local environment variables from .env if present
 load_dotenv()
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "change-me-in-production")
-DEBUG = os.environ.get("DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-dev-key')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'you-ai-yqg9.onrender.com', '.onrender.com']
+
+# Dynamic Site ID: Site 2 on Render, Site 1 locally
+SITE_ID = int(os.environ.get('SITE_ID', 2 if 'onrender.com' in os.environ.get('RENDER_EXTERNAL_URL', '') else 1))
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "django.contrib.sites",  # Required by django-allauth
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.sites',
 
-    # django-allauth apps
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
+    # Third-party apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
-    # Local apps
-    "accounts",
-    "chat",
+    # Custom local apps
+    'accounts',
+    'chat',
 ]
-
-SITE_ID = 1
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "allauth.account.middleware.AccountMiddleware",  # Required by django-allauth
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",  # Required by django-allauth
-]
+ROOT_URLCONF = 'you_ai.urls'
 
-# Google Provider Specific Settings
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        }
-    }
-}
-
-ROOT_URLCONF = "you_ai.urls"
-
-TEMPLATES = [{
-    "BACKEND": "django.template.backends.django.DjangoTemplates",
-    "DIRS": [BASE_DIR / "templates"],
-    "APP_DIRS": True,
-    "OPTIONS": {
-        "context_processors": [
-            "django.template.context_processors.debug",
-            "django.template.context_processors.request",  # Required by allauth
-            "django.contrib.auth.context_processors.auth",
-            "django.contrib.messages.context_processors.messages",
-        ],
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
     },
-}]
+]
 
-WSGI_APPLICATION = "you_ai.wsgi.application"
+WSGI_APPLICATION = 'you_ai.wsgi.application'
 
-# --- Database ---
-# Defaults to SQLite for local dev. If NEON_DATABASE_URL is set (e.g. on
-# Render, or locally via .env), it switches to Neon Postgres automatically.
-NEON_DATABASE_URL = os.environ.get("NEON_DATABASE_URL", "")
+# ==========================================
+# DATABASE CONFIGURATION
+# ==========================================
+db_url = os.environ.get('NEON_DATABASE_URL') or os.environ.get('DATABASE_URL')
 
-if NEON_DATABASE_URL:
-    import dj_database_url
-
+if db_url:
     DATABASES = {
-        "default": dj_database_url.parse(NEON_DATABASE_URL, conn_max_age=600)
+        'default': dj_database_url.parse(
+            db_url,
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 else:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
 
-# pgvector (for personality/memory embeddings, see roadmap section 3)
-# is supported natively on Neon   no separate vector DB needed once
-# that work starts.
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
 
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
-LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/chat/"
-ACCOUNT_LOGOUT_REDIRECT_URL = "/"
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "Asia/Kolkata"
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# HuggingFace (GenAI backend   same as Phynix, Llama 3.1)
-HF_TOKEN = os.environ.get("HF_TOKEN", "")
+# ==========================================
+# STATIC FILES CONFIGURATION
+# ==========================================
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-
-# Allow CSRF POST requests from Render
-CSRF_TRUSTED_ORIGINS = [
-    'https://you-ai-yqg9.onrender.com',
-    'http://127.0.0.1:8000',
-    'http://localhost:8000',
+# ==========================================
+# AUTHENTICATION & ALLAUTH CONFIGURATION
+# ==========================================
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Tell Django it is behind Render's HTTPS reverse proxy
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*']
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'VERIFIED_EMAIL': True,
+    }
+}
+
+LOGIN_REDIRECT_URL = '/accounts/nickname/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

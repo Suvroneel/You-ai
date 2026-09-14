@@ -2,7 +2,7 @@ from django.db import models
 from accounts.models import GoogleUser
 
 
-# --- Neon table placeholders — not migrated, not active yet ---
+# --- Neon table placeholders   not migrated, not active yet ---
 #
 # Right now chat history lives in request.session only (see chat/views.py).
 # These are commented out so the schema shape is decided in advance.
