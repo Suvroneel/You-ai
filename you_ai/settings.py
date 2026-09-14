@@ -125,3 +125,14 @@ USE_TZ = True
 
 # HuggingFace (GenAI backend   same as Phynix, Llama 3.1)
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
+
+
+# Allow CSRF POST requests from Render
+CSRF_TRUSTED_ORIGINS = [
+    'https://you-ai-yqg9.onrender.com',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]
+
+# Tell Django it is behind Render's HTTPS reverse proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
