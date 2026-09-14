@@ -1,14 +1,15 @@
 from django.db import models
 
-# --- Neon table placeholder   not migrated, not active yet ---
-#
-# Current auth is session-only, no user table at all (see accounts/views.py).
-# This is the shape it'll need once real signup replaces the stub, including
-# the fields that feed the personality space (see roadmap section 3).
+class GoogleUser(models.Model):
+    """
+    Stores core Google OAuth authentication identity data.
+    Separated from personality data so core auth credentials remain immutable.
+    """
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=255)
+    google_sub = models.CharField(max_length=255, unique=True, db_index=True)
+    profile_image = models.URLField(max_length=500, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-# class UserProfile(models.Model):
-#     name = models.CharField(max_length=255)
-#     email = models.EmailField(unique=True, null=True, blank=True)  # null for now if email/password auth isn't decided yet
-#     # onboarding_answers = models.JSONField(default=dict)   # raw questionnaire responses from signup
-#     # personality_profile = models.JSONField(default=dict)  # derived tone/style profile, see chat/services/personality.py
-#     created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.name} ({self.email})"

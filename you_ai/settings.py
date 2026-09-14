@@ -17,9 +17,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",  # Required by django-allauth
+
+    # django-allauth apps
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+
+    # Local apps
     "accounts",
     "chat",
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -28,9 +39,28 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "allauth.account.middleware.AccountMiddleware",  # Required by django-allauth
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",  # Required by django-allauth
+]
+
+# Google Provider Specific Settings
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        }
+    }
+}
 
 ROOT_URLCONF = "you_ai.urls"
 
@@ -41,7 +71,7 @@ TEMPLATES = [{
     "OPTIONS": {
         "context_processors": [
             "django.template.context_processors.debug",
-            "django.template.context_processors.request",
+            "django.template.context_processors.request",  # Required by allauth
             "django.contrib.auth.context_processors.auth",
             "django.contrib.messages.context_processors.messages",
         ],
@@ -57,6 +87,7 @@ NEON_DATABASE_URL = os.environ.get("NEON_DATABASE_URL", "")
 
 if NEON_DATABASE_URL:
     import dj_database_url
+
     DATABASES = {
         "default": dj_database_url.parse(NEON_DATABASE_URL, conn_max_age=600)
     }
@@ -84,6 +115,7 @@ STORAGES = {
 
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/chat/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LANGUAGE_CODE = "en-us"
