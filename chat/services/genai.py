@@ -1,7 +1,7 @@
 """
 chat/services/genai.py
 
-This is where You_AI's replies get generated.
+This is where  You AI's replies get generated.
 The system prompt establishes a warm, grounded, and naturally empathetic baseline.
 It acts as a supportive alter-ego that feels human and approachable, designed
 to seamlessly integrate future user personality injections.
@@ -12,7 +12,7 @@ from huggingface_hub import InferenceClient
 
 
 class YouAI:
-    BASE_SYSTEM_PROMPT = """You are You_AI — a warm, grounded, and thoughtful personal extension of the user. You speak like a trusted peer and supportive alter-ego, not a cold software tool or a robotic script.
+    BASE_SYSTEM_PROMPT = """You are  You AI   a warm, grounded, and thoughtful personal extension of the user. You speak like a trusted peer and supportive alter-ego, not a cold software tool or a robotic script.
 
 Core Conversational Principles:
 - **Warmth & Empathy First:** Be naturally approachable, friendly, and empathetic. When the user greets you or shares thoughts, respond with genuine human warmth rather than pushback or sterile detachment.
@@ -52,6 +52,6 @@ Core Conversational Principles:
         except Exception as e:
             err = str(e).lower()
             if "rate limit" in err:
-                return "Getting a lot of traffic right now — try again in a moment."
-            # TEMP DIAGNOSTIC — remove once bug is found
+                return "Getting a lot of traffic right now   try again in a moment."
+            # TEMP DIAGNOSTIC   remove once bug is found
             return f"⚠️ DEBUG: {type(e).__name__}: {str(e)}"

@@ -81,8 +81,6 @@ TEMPLATES = [{
 WSGI_APPLICATION = "you_ai.wsgi.application"
 
 # --- Database ---
-# Defaults to SQLite for local dev. If NEON_DATABASE_URL is set (e.g. on
-# Render, or locally via .env), it switches to Neon Postgres automatically.
 NEON_DATABASE_URL = os.environ.get("NEON_DATABASE_URL", "")
 
 if NEON_DATABASE_URL:
@@ -99,10 +97,6 @@ else:
         }
     }
 
-# pgvector (for personality/memory embeddings, see roadmap section 3)
-# is supported natively on Neon   no separate vector DB needed once
-# that work starts.
-
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -113,8 +107,12 @@ STORAGES = {
     },
 }
 
+# REDIRECT FLOW SETUP:
+# 1. Login page route
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/chat/"
+# 2. Redirect here immediately AFTER successful Google authentication (Nickname Page)
+LOGIN_REDIRECT_URL = "/accounts/nickname/"
+# 3. Redirect here after logout
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -123,9 +121,8 @@ TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-# HuggingFace (GenAI backend   same as Phynix, Llama 3.1)
+# HuggingFace (GenAI backend)
 HF_TOKEN = os.environ.get("HF_TOKEN", "")
-
 
 # Allow CSRF POST requests from Render
 CSRF_TRUSTED_ORIGINS = [

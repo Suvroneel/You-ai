@@ -4,7 +4,7 @@
 # See YOU_AI_ROADMAP.md section 4 (Multimodal) for context.
 #
 # Purpose:
-#   Lets You_AI "see"   read a shared screenshot/document image, or pull
+#   Lets  You AI "see"   read a shared screenshot/document image, or pull
 #   context out of an uploaded photo, rather than only handling text.
 #   Exact use case still needs to be narrowed down (see roadmap doc)  
 #   this stub covers the most likely first use case: reading images the
@@ -31,7 +31,7 @@
 # def extract_text_from_image(image_file) -> str:
 #     """
 #     OCR pass using pytesseract. Useful when the user shares a
-#     screenshot of a message/document and wants You_AI to read + react
+#     screenshot of a message/document and wants  You AI to read + react
 #     to it as if they'd read it themselves.
 #     """
 #     pass
