@@ -1,27 +1,57 @@
-{% extends "base.html" %}
+{% extends "dashboard_base.html" %}
 {% load static %}
 
 {% block title %}You AI — Chat{% endblock %}
 
-{% block extra_css %}
+{% block dashboard_extra_css %}
 <link rel="stylesheet" href="{% static 'css/chat.css' %}">
+<style>
+    .chat-page {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+    .chat-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+    }
+    .chat-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0;
+    }
+    .new-chat-btn {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+    .new-chat-btn:hover {
+        background: #e9e9ed;
+    }
+</style>
 {% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
 <div class="chat-page">
-    <header class="chat-header">
-        <h1 class="brand">
-            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="brand-logo">
-            You AI
-        </h1>
-        <div class="header-actions">
-            <button hx-post="{% url 'chat:new_chat' %}" hx-target="#message-list" hx-swap="innerHTML" onclick="document.getElementById('message-list').innerHTML=''">New chat</button>
-            <form method="post" action="{% url 'accounts:logout' %}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="ghost">Log out</button>
-            </form>
-        </div>
-    </header>
+    <div class="chat-top-bar">
+        <h2 class="chat-title">Chat Workspace</h2>
+        <button class="new-chat-btn" hx-post="{% url 'chat:new_chat' %}" hx-target="#message-list" hx-swap="innerHTML" onclick="document.getElementById('message-list').innerHTML=''">+ New chat</button>
+    </div>
 
     <div id="message-list" class="message-list">
         {% if not messages %}

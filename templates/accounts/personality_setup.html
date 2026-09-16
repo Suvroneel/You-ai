@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}You AI — Tone & Style Setup{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/nickname.css' %}">
+    <style>
+        /* Precision styling adjustments to match project card layout seamlessly */
+        .setup-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #111;
+            margin-top: 1.2rem;
+            margin-bottom: 0.6rem;
+            text-align: left;
+        }
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+            color: #333;
+        }
+        .toggle-row:last-of-type {
+            border-bottom: none;
+        }
+        /* Custom iOS-style toggle switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #0066ff;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.4rem;
+            margin-bottom: 1.2rem;
+        }
+        .radio-option {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .radio-option input {
+            display: none;
+        }
+        .radio-option.selected, .radio-option input:checked + span {
+            font-weight: 600;
+        }
+        /* Active state for custom radio buttons */
+        input[type="radio"]:checked + span {
+            color: #0066ff;
+        }
+        .radio-option:has(input:checked) {
+            border-color: #0066ff;
+            background-color: #f4f8ff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h1 class="brand">
+            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="brand-logo">
+            You AI
+        </h1>
+        <p class="tagline">The self, extended.</p>
+
+        <form method="post" action="{% url 'accounts:personality_setup' %}">
+            {% csrf_token %}
+            
+            <p class="setup-section-title" style="margin-top: 0;">Tone Options</p>
+            
+            <div class="toggle-row">
+                <span>Warm</span>
+                <label class="switch">
+                    <input type="checkbox" name="tones" value="Warm" {% if "Warm" in current_tone or not current_tone %}checked{% endif %}>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row">
+                <span>Sarcastic</span>
+                <label class="switch">
+                    <input type="checkbox" name="tones" value="Sarcastic" {% if "Sarcastic" in current_tone %}checked{% endif %}>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-row">
+                <span>Enthusiastic</span>
+                <label class="switch">
+                    <input type="checkbox" name="tones" value="Enthusiastic" {% if "Enthusiastic" in current_tone %}checked{% endif %}>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <p class="setup-section-title">Communication Style</p>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="communication_style" value="Casual" {% if current_style == "Casual" or not current_style %}checked{% endif %}>
+                    <span>Casual</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="communication_style" value="Direct" {% if current_style == "Direct" %}checked{% endif %}>
+                    <span>Direct</span>
+                </label>
+            </div>
+
+            <button type="submit" style="margin-top: 0.5rem;">Continue</button>
+        </form>
+
+        <p class="note" style="margin-top: 1rem;">Configuring your baseline presence profile for You AI.</p>
+    </div>
+</div>
+{% endblock %}
