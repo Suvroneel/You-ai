@@ -1,11 +1,19 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %} You AI   Setup Profile{% endblock %}
+{% block title %}You AI — Setup Profile{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/nickname.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="auth-wrap">
     <div class="auth-card">
-        <h1 class="brand"> You AI</h1>
+        <h1 class="brand">
+            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="brand-logo">
+            You AI
+        </h1>
         <p class="tagline">The self, extended.</p>
 
         {% if error %}
@@ -15,19 +23,19 @@
         <form method="post" action="{% url 'accounts:nickname' %}">
             {% csrf_token %}
             <label for="name">What should I call you?</label>
-            <input 
-                type="text" 
-                id="name" 
-                name="name" 
-                placeholder="Your name" 
-                value="{{ existing_name }}" 
-                autofocus 
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your name"
+                value="{{ existing_name }}"
+                autofocus
                 required
             >
             <button type="submit">Continue</button>
         </form>
 
-        <p class="note">Full account setup   including the questions that shape how  You AI mirrors your tone   is coming later. For now, this just gets you into the chat.</p>
+        <p class="note">Full account setup including the questions that shape how You AI mirrors your tone is coming later. For now, this just gets you into the chat.</p>
     </div>
 </div>
 {% endblock %}
