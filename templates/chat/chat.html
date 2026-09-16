@@ -1,9 +1,19 @@
 {% extends "base.html" %}
-{% block title %} You AI   Chat{% endblock %}
+{% load static %}
+
+{% block title %}You AI — Chat{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}" xmlns:hx-on="http://www.w3.org/1999/xhtml">
+{% endblock %}
+
 {% block content %}
 <div class="chat-page">
     <header class="chat-header">
-        <h1 class="brand"> You AI</h1>
+        <h1 class="brand">
+            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="brand-logo">
+            You AI
+        </h1>
         <div class="header-actions">
             <button hx-post="{% url 'chat:new_chat' %}" hx-target="#message-list" hx-swap="innerHTML" onclick="document.getElementById('message-list').innerHTML=''">New chat</button>
             <form method="post" action="{% url 'accounts:logout' %}" style="display:inline;">
