@@ -5,8 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}You AI{% endblock %}</title>
+
+    <!-- Favicon Integration -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicons/favicon-16x16.png' %}">
+    <link rel="shortcut icon" href="{% static 'favicons/favicon.ico' %}">
+    <link rel="manifest" href="{% static 'favicons/site.webmanifest' %}">
+
+    <!-- Styles & Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/you_ai.css' %}">
+
+    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
