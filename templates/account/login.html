@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}You AI — Sign In{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/nickname.css' %}">
+<style>
+    .auth-wrap {
+        background-image: url("{% static 'images/nature.jpg' %}");
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h1 class="brand">
+            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="brand-logo">
+            You AI
+        </h1>
+        <p class="tagline">The self, extended.</p>
+
+        <form method="post" action="{% provider_login_url 'google' %}">
+            {% csrf_token %}
+            <button type="submit" style="width: 100%;">Sign in with Google</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
