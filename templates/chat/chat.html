@@ -1,9 +1,19 @@
 {% extends "base.html" %}
-{% block title %} You AI   Chat{% endblock %}
+{% load static %}
+
+{% block title %}You AI — Chat{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="chat-page">
     <header class="chat-header">
-        <h1 class="brand"> You AI</h1>
+        <h1 class="brand">
+            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="brand-logo">
+            You AI
+        </h1>
         <div class="header-actions">
             <button hx-post="{% url 'chat:new_chat' %}" hx-target="#message-list" hx-swap="innerHTML" onclick="document.getElementById('message-list').innerHTML=''">New chat</button>
             <form method="post" action="{% url 'accounts:logout' %}" style="display:inline;">
@@ -29,10 +39,10 @@
           hx-post="{% url 'chat:send_message' %}"
           hx-target="#message-list"
           hx-swap="beforeend"
+          hx-disabled-elt="find input"
           hx-on::after-request="this.reset(); document.getElementById('message-list').scrollTop = document.getElementById('message-list').scrollHeight;">
         {% csrf_token %}
-        <input type="text" name="message" placeholder="Type something..." autocomplete="off" required>
-        <button type="submit">Send</button>
+        <input type="text" name="message" placeholder="Type something and press Enter..." autocomplete="off" required>
     </form>
 </div>
 {% endblock %}

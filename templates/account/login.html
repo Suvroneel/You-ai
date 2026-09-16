@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}You AI — Sign In{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/nickname.css' %}">
+<style>
+    .auth-wrap {
+        background-image: url("{% static 'images/nature.jpg' %}");
+    }
+
+    .google-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background-color: #ffffff;
+        color: #1f1f1f;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .google-btn:hover {
+        background-color: #f8f9fa;
+        border-color: #c6c6c6;
+    }
+
+    .google-icon {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h1 class="brand">
+            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="brand-logo">
+            You AI
+        </h1>
+        <p class="tagline">The self, extended.</p>
+
+        <form method="post" action="{% provider_login_url 'google' %}">
+            {% csrf_token %}
+            <button type="submit" class="google-btn">
+                <img src="{% static 'images/google.svg' %}" alt="Google Logo" class="google-icon">
+                Sign in with Google
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
