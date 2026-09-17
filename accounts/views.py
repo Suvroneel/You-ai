@@ -29,12 +29,9 @@ def nickname_view(request):
         request.user.first_name = name
         request.user.save(update_fields=["first_name"])
 
-        # Redirect to the new personality configuration screen instead of straight to chat
         return redirect("accounts:personality_setup")
 
-    # If nickname is already set in session, prepopulate or proceed directly
     existing_name = request.session.get("username", request.user.first_name or "")
-
     return render(request, "accounts/nickname.html", {"existing_name": existing_name})
 
 
@@ -42,41 +39,79 @@ def nickname_view(request):
 def personality_setup_view(request):
     """
     Onboarding step 2: Captures tone preferences (Warm, Sarcastic, Enthusiastic)
-    and communication style (Casual, Direct) within the same card layout.
+    and communication style (Casual, Direct).
     """
-    # Fetch current GoogleUser instance
     try:
         google_user = GoogleUser.objects.get(email=request.user.email)
     except GoogleUser.DoesNotExist:
-        # Fallback safeguard if record isn't matched yet
         google_user, _ = GoogleUser.objects.get_or_create(
             email=request.user.email,
             defaults={"name": request.user.first_name or "User", "google_sub": str(request.user.id)}
         )
 
-    # Ensure a UserPersonality record exists for this user
     personality, _ = UserPersonality.objects.get_or_create(user=google_user)
 
     if request.method == "POST":
-        # Extract selected tones (checkboxes/toggles submitted as lists or boolean flags)
-        selected_tones = request.POST.getlist("tones")  # e.g., ["Warm", "Sarcastic"]
+        selected_tones = request.POST.getlist("tones")
         tone_preference_str = ", ".join(selected_tones) if selected_tones else "Warm"
-
-        # Extract communication style
         comm_style = request.POST.get("communication_style", "Casual")
 
-        # Save to database
         personality.tone_preference = tone_preference_str
         personality.communication_style = comm_style
         personality.save()
 
-        # Update session flags if needed and redirect to chat
         request.session["personality_setup_complete"] = True
         request.session.modified = True
 
         return redirect("/chat/")
 
     return render(request, "accounts/personality_setup.html", {
+        "current_tone": personality.tone_preference or "",
+        "current_style": personality.communication_style or "Casual"
+    })
+
+
+@login_required
+def settings_view(request):
+    """
+    Settings view to edit nickname, tone preferences, and communication style.
+    """
+    try:
+        google_user = GoogleUser.objects.get(email=request.user.email)
+    except GoogleUser.DoesNotExist:
+        google_user, _ = GoogleUser.objects.get_or_create(
+            email=request.user.email,
+            defaults={"name": request.user.first_name or "User", "google_sub": str(request.user.id)}
+        )
+
+    personality, _ = UserPersonality.objects.get_or_create(user=google_user)
+
+    if request.method == "POST":
+        name = (request.POST.get("nickname") or request.POST.get("name") or "").strip()
+        if name:
+            request.session["username"] = name
+            request.session.modified = True
+            request.user.first_name = name
+            request.user.save(update_fields=["first_name"])
+            google_user.name = name
+            google_user.save(update_fields=["name"])
+
+        selected_tones = request.POST.getlist("tones")
+        personality.tone_preference = ", ".join(selected_tones) if selected_tones else "Warm"
+
+        comm_style = request.POST.get("communication_style", "Casual")
+        personality.communication_style = comm_style
+        personality.save()
+
+        return render(request, "accounts/settings.html", {
+            "current_name": request.user.first_name or "",
+            "current_tone": personality.tone_preference or "",
+            "current_style": personality.communication_style or "Casual",
+            "success_message": "Settings updated successfully!"
+        })
+
+    return render(request, "accounts/settings.html", {
+        "current_name": request.user.first_name or request.session.get("username", ""),
         "current_tone": personality.tone_preference or "",
         "current_style": personality.communication_style or "Casual"
     })
