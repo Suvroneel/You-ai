@@ -3,6 +3,29 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <style>
+        /* Exact sub-divider matching the header border style */
+        .sidebar-divider {
+            height: 1px;
+            background-color: var(--border);
+            margin: 1rem 0;
+        }
+        /* Style for disabled upcoming extension items */
+        .sidebar-link.disabled {
+            opacity: 0.6;
+            cursor: default;
+            pointer-events: none;
+        }
+        .soon-badge {
+            font-size: 0.7rem;
+            margin-left: auto;
+            background: #e2e8f0;
+            color: #475569;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+    </style>
     {% block dashboard_extra_css %}{% endblock %}
 {% endblock %}
 
@@ -18,6 +41,7 @@
             <span class="badge-tag">v1.0</span>
         </div>
 
+        <!-- Workspace Section -->
         <div class="sidebar-nav-section">
             <p class="sidebar-section-title">WORKSPACE</p>
             <nav class="sidebar-nav">
@@ -28,12 +52,34 @@
             </nav>
         </div>
 
+        <!-- Upcoming Extensions Section -->
         <div class="sidebar-nav-section">
             <p class="sidebar-section-title">EXTENSIONS</p>
             <nav class="sidebar-nav">
-                <a href="#" class="sidebar-link" onclick="return false;" style="opacity: 0.5; cursor: default;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
-                    Voice / Vision <span style="font-size: 0.7rem; margin-left: auto; background: #e2e8f0; padding: 2px 5px; border-radius: 4px;">Soon</span>
+                <div class="sidebar-link disabled">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    Calls <span class="soon-badge">Soon</span>
+                </div>
+                <div class="sidebar-link disabled">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    Email <span class="soon-badge">Soon</span>
+                </div>
+                <div class="sidebar-link disabled">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Persona <span class="soon-badge">Soon</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Clean sub-divider line above Settings -->
+        <div class="sidebar-divider"></div>
+
+        <!-- Settings Section -->
+        <div class="sidebar-nav-section">
+            <nav class="sidebar-nav">
+                <a href="{% url 'accounts:settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"></path></svg>
+                    Settings
                 </a>
             </nav>
         </div>
