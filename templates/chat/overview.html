@@ -1,0 +1,266 @@
+{% extends "dashboard_base.html" %}
+{% load static %}
+
+{% block dashboard_extra_css %}
+<style>
+    .overview-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: calc(100vh - 4rem);
+        padding: 2rem 1.5rem 4.5rem;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 0.4s ease-out;
+        width: 100%;
+    }
+
+    .overview-container::before {
+        content: "";
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 1000px;
+        height: 550px;
+        background: radial-gradient(
+            circle,
+            rgba(0, 102, 255, 0.15) 0%,
+            rgba(0, 102, 255, 0.05) 45%,
+            rgba(255, 255, 255, 0) 75%
+        );
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(14px);
+    }
+
+    .greeting-header {
+        text-align: center;
+        margin-top: auto;
+        margin-bottom: 3rem;
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .greeting-title {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-size: 2.75rem;
+        font-weight: 400;
+        color: var(--text-main, #111827);
+        letter-spacing: -0.025em;
+        margin-bottom: 0.75rem;
+        text-align: center;
+    }
+
+    .greeting-logo {
+        width: 46px;
+        height: 46px;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+    .greeting-title .highlight-name {
+        color: #0066FF;
+        font-weight: 500;
+    }
+
+    .greeting-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted, #6b7280);
+        font-weight: 400;
+        text-align: center;
+    }
+
+    .action-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+        width: 100%;
+        max-width: 1100px;
+        position: relative;
+        z-index: 1;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 980px) {
+        .action-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .action-cards-grid {
+            grid-template-columns: 1fr;
+        }
+        .overview-container {
+            padding-bottom: 2.5rem;
+        }
+    }
+
+    .action-card {
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(226, 232, 240, 0.85);
+        border-radius: 14px;
+        padding: 1.4rem;
+        text-decoration: none;
+        color: var(--text-main, #111827);
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .action-card:hover {
+        border-color: rgba(0, 102, 255, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0, 102, 255, 0.1);
+        background: #ffffff;
+    }
+
+    .action-card.card-disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        pointer-events: none;
+        background: rgba(248, 250, 252, 0.65);
+        box-shadow: none;
+    }
+
+    .card-icon-wrapper {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #eff6ff;
+        color: #0066FF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-disabled .card-icon-wrapper {
+        background: #f1f5f9;
+        color: #94a3b8;
+    }
+
+    .card-title {
+        font-size: 1.05rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .soon-badge {
+        font-size: 0.725rem;
+        font-weight: 500;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        background: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .active-badge {
+        font-size: 0.725rem;
+        font-weight: 500;
+        padding: 0.15rem 0.5rem;
+        border-radius: 6px;
+        background: #eff6ff;
+        color: #0066FF;
+        border: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .card-desc {
+        font-size: 0.875rem;
+        color: var(--text-muted, #64748b);
+        line-height: 1.5;
+        font-weight: 400;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="overview-container">
+    <div class="greeting-header">
+        <h1 class="greeting-title">
+            <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="greeting-logo">
+            Hi <span class="highlight-name">{{ request.user.first_name|default:request.session.username|default:"there" }}</span>
+        </h1>
+        <p class="greeting-subtitle">What are we working on today?</p>
+    </div>
+
+    <div class="action-cards-grid">
+        <!-- Brainstorming Workspace -->
+        <a href="{% url 'chat:chat' %}" class="action-card">
+            <div class="card-icon-wrapper">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div class="card-title">Brainstorming</div>
+            <div class="card-desc">Jump into your private workspace to map out ideas, outline tasks, and write with your digital twin.</div>
+        </a>
+
+        <!-- Train Your AI Buddy -->
+        <a href="{% url 'chat:persona' %}" class="action-card">
+            <div class="card-icon-wrapper">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            </div>
+            <div class="card-title">
+                Train Your AI Buddy
+                <span class="active-badge">Persona</span>
+            </div>
+            <div class="card-desc">Calibrate your digital twin by mapping your core identity, behavioral patterns, and personal writing style.</div>
+        </a>
+
+        <!-- Perception -->
+        <a href="{% url 'chat:perception' %}" class="action-card">
+            <div class="card-icon-wrapper">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/></svg>
+            </div>
+            <div class="card-title">
+                Perception
+                <span class="soon-badge">Soon</span>
+            </div>
+            <div class="card-desc">Fine-tune spatial awareness, visual context processing, and custom voice clone synthesis.</div>
+        </a>
+
+        <!-- Make Your Calls -->
+        <div class="action-card card-disabled">
+            <div class="card-icon-wrapper">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <div class="card-title">
+                Make Your Calls
+                <span class="soon-badge">Calls</span>
+            </div>
+            <div class="card-desc">Delegate voice calls, appointment scheduling, and automated phone outreach to your AI voice agent.</div>
+        </div>
+
+        <!-- Write Your Emails -->
+        <div class="action-card card-disabled">
+            <div class="card-icon-wrapper">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div class="card-title">
+                Write Your Emails
+                <span class="soon-badge">Email</span>
+            </div>
+            <div class="card-desc">Draft responses, process unread messages, and manage communications in your authentic voice.</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
