@@ -3,7 +3,15 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from accounts.decorators import login_required
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
+@login_required
+def overview_view(request):
+    """
+    Overview / Home page dashboard.
+    """
+    return render(request, "chat/overview.html")
 @login_required
 def chat_view(request):
     messages = request.session.get("chat_messages", [])
