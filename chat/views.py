@@ -3,6 +3,24 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from accounts.decorators import login_required
 
+@login_required
+def persona_view(request):
+    return render(request, 'chat/persona.html')
+
+@login_required
+def perception_view(request):
+    return render(request, 'chat/perception.html')
+
+@login_required
+def outreach_view(request):
+    return render(request, 'chat/outreach.html')
+
+@login_required
+def overview_view(request):
+    """
+    Overview / Home page dashboard.
+    """
+    return render(request, "chat/overview.html")
 
 @login_required
 def chat_view(request):
@@ -12,7 +30,6 @@ def chat_view(request):
         "username": request.session.get("username", request.user.first_name or "there"),
     }
     return render(request, "chat/chat.html", context)
-
 
 @login_required
 @require_POST
@@ -43,7 +60,6 @@ def send_message(request):
     user_html = render(request, "chat/_message.html", {"msg": {"sender": "user", "content": text}}).content.decode()
     bot_html = render(request, "chat/_message.html", {"msg": {"sender": "bot", "content": reply}}).content.decode()
     return HttpResponse(user_html + bot_html)
-
 
 @login_required
 @require_POST
