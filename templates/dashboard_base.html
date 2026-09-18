@@ -4,13 +4,11 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <style>
-        /* Exact sub-divider matching the header border style */
         .sidebar-divider {
             height: 1px;
             background-color: var(--border);
             margin: 1rem 0;
         }
-        /* Style for disabled upcoming extension items */
         .sidebar-link.disabled {
             opacity: 0.6;
             cursor: default;
@@ -41,37 +39,55 @@
             <span class="badge-tag">v1.0</span>
         </div>
 
+        <!-- OVERVIEW SECTION -->
+        <nav class="sidebar-nav" style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+            <a href="{% url 'chat:overview' %}" class="sidebar-link {% if request.resolver_match.url_name == 'overview' %}active{% endif %}">
+                Overview
+            </a>
+        </nav>
+
         <!-- Workspace Section -->
         <div class="sidebar-nav-section">
             <p class="sidebar-section-title">WORKSPACE</p>
             <nav class="sidebar-nav">
-                <a href="{% url 'chat:chat' %}" class="sidebar-link {% if request.resolver_match.app_name == 'chat' %}active{% endif %}">
+                <a href="{% url 'chat:chat' %}" class="sidebar-link {% if request.resolver_match.url_name == 'chat' %}active{% endif %}">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     Chat
                 </a>
             </nav>
         </div>
 
-        <!-- Upcoming Extensions Section -->
+        <!-- Extensions Section -->
         <div class="sidebar-nav-section">
             <p class="sidebar-section-title">EXTENSIONS</p>
             <nav class="sidebar-nav">
+                <a href="{% url 'chat:persona' %}" class="sidebar-link {% if request.resolver_match.url_name == 'persona' %}active{% endif %}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m6.5 6.5 11 11"/>
+                        <path d="m21 21-1-1"/>
+                        <path d="m3 3 1 1"/>
+                        <path d="m18 22 4-4"/>
+                        <path d="m2 6 4-4"/>
+                        <path d="m3 10 7-7"/>
+                        <path d="m14 21 7-7"/>
+                    </svg>
+                    Persona
+                </a>
+                <a href="{% url 'chat:perception' %}" class="sidebar-link {% if request.resolver_match.url_name == 'perception' %}active{% endif %}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M12 5v13"/></svg>
+                    Perception <span class="soon-badge">Soon</span>
+                </a>
                 <div class="sidebar-link disabled">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                     Calls <span class="soon-badge">Soon</span>
                 </div>
-                <div class="sidebar-link disabled">
+                <a href="{% url 'chat:outreach' %}" class="sidebar-link {% if request.resolver_match.url_name == 'outreach' %}active{% endif %}">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    Email <span class="soon-badge">Soon</span>
-                </div>
-                <div class="sidebar-link disabled">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                    Persona <span class="soon-badge">Soon</span>
-                </div>
+                    Outreach
+                </a>
             </nav>
         </div>
 
-        <!-- Clean sub-divider line above Settings -->
         <div class="sidebar-divider"></div>
 
         <!-- Settings Section -->
@@ -84,7 +100,6 @@
             </nav>
         </div>
 
-        <!-- Sidebar Footer: User profile & Logout -->
         <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-avatar-placeholder">
@@ -104,7 +119,6 @@
         </div>
     </aside>
 
-    <!-- Main Content Area -->
     <main class="main-content">
         {% block dashboard_content %}{% endblock %}
     </main>
