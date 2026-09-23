@@ -1,0 +1,155 @@
+{% extends "dashboard_base.html" %}
+{% load static %}
+
+{% block dashboard_extra_css %}
+<style>
+    .hub-container {
+        padding: 3rem 2rem;
+        max-width: 960px;
+        margin: 0 auto;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .hub-header {
+        text-align: center;
+        margin-bottom: 3.5rem;
+    }
+
+    .hub-title {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: var(--text-main, #111827);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .hub-subtitle {
+        color: var(--text-muted, #64748b);
+        font-size: 1.05rem;
+        margin-top: 0.5rem;
+    }
+
+    .channel-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.75rem;
+    }
+
+    @media (max-width: 700px) {
+        .channel-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .channel-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        border-radius: 16px;
+        padding: 2rem;
+        text-decoration: none;
+        color: var(--text-main, #111827);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .channel-card:hover {
+        border-color: rgba(0, 102, 255, 0.4);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 102, 255, 0.12);
+        background: #ffffff;
+    }
+
+    .channel-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: #eff6ff;
+        color: #0066FF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .channel-icon.whatsapp-icon {
+        background: #25D366;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+    }
+
+    .channel-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .channel-desc {
+        font-size: 0.95rem;
+        color: var(--text-muted, #64748b);
+        line-height: 1.5;
+    }
+
+    .arrow-icon {
+        color: #0066FF;
+        opacity: 0;
+        transform: translateX(-6px);
+        transition: all 0.2s ease;
+    }
+
+    .channel-card:hover .arrow-icon {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="hub-container">
+    <div class="hub-header">
+        <h1 class="hub-title">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Outreach Studio
+        </h1>
+        <p class="hub-subtitle">Choose a channel to start drafting personalized communication with your AI persona.</p>
+    </div>
+
+    <div class="channel-grid">
+        <!-- Email Option -->
+        <a href="{% url 'chat:outreach_email' %}" class="channel-card">
+            <div class="channel-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div class="channel-title">
+                Emails
+                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            <div class="channel-desc">Generate solution blueprints, cold pitches, and structured email responses tailored to your recipient.</div>
+        </a>
+
+        <!-- WhatsApp Option -->
+        <a href="{% url 'chat:outreach_messages' %}" class="channel-card">
+            <div class="channel-icon whatsapp-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662a11.87 11.87 0 005.71 1.455h.005c6.554 0 11.89-5.335 11.893-11.893 0-3.174-1.236-6.158-3.48-8.402"/>
+                </svg>
+            </div>
+            <div class="channel-title">
+                WhatsApp
+                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            <div class="channel-desc">Draft direct chat messages and short-form outreach formatted specifically for WhatsApp.</div>
+        </a>
+    </div>
+</div>
+{% endblock %}

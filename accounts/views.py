@@ -63,7 +63,7 @@ def personality_setup_view(request):
         request.session["personality_setup_complete"] = True
         request.session.modified = True
 
-        return redirect("/chat/")
+        return redirect("/chat/overview/")
 
     return render(request, "accounts/personality_setup.html", {
         "current_tone": personality.tone_preference or "",

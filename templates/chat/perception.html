@@ -1,0 +1,20 @@
+{% extends "dashboard_base.html" %}
+
+{% block dashboard_content %}
+<div style="display: flex; height: 100%; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+    <div style="max-width: 440px; background: #ffffff; border: 1px solid var(--border, #e2e8f0); border-radius: 16px; padding: 2.5rem 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+        <div style="width: 56px; height: 56px; border-radius: 14px; background: #eff6ff; color: #0066FF; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/>
+                <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/>
+                <path d="M12 5v13"/>
+            </svg>
+        </div>
+        <h2 style="margin-bottom: 0.5rem; color: var(--text, #111827); font-size: 1.35rem; font-weight: 600;">Calibrate Sight & Speech</h2>
+        <span class="soon-badge" style="display: inline-block; margin-bottom: 1rem;">Coming Soon</span>
+        <p style="color: var(--muted, #64748b); font-size: 0.9rem; line-height: 1.5;">
+            Fine-tune spatial awareness, visual context processing, and custom voice clone synthesis. Multimodal setup is currently under active development.
+        </p>
+    </div>
+</div>
+{% endblock %}
