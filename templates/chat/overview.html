@@ -9,7 +9,7 @@
         align-items: center;
         justify-content: flex-end;
         min-height: calc(100vh - 4rem);
-        padding: 2rem 1.5rem 4.5rem;
+        padding: 1.5rem 1.5rem 4.5rem;
         position: relative;
         overflow: hidden;
         animation: fadeIn 0.4s ease-out;
@@ -35,9 +35,37 @@
         filter: blur(14px);
     }
 
+    .overview-announcement {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 102, 255, 0.22);
+        color: #0066FF;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        box-shadow: 0 4px 14px rgba(0, 102, 255, 0.08);
+        position: relative;
+        z-index: 1;
+        margin-bottom: auto;
+    }
+
+    .overview-announcement-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #0066FF;
+        flex-shrink: 0;
+    }
+
     .greeting-header {
         text-align: center;
-        margin-top: auto;
+        margin-top: 1.5rem;
         margin-bottom: 3rem;
         position: relative;
         z-index: 1;
@@ -196,6 +224,11 @@
 
 {% block dashboard_content %}
 <div class="overview-container">
+    <div class="overview-announcement">
+        <span class="overview-announcement-dot"></span>
+        <span>Android app in active development - coming soon 🎉 </span>
+    </div>
+
     <div class="greeting-header">
         <h1 class="greeting-title">
             <img src="{% static 'favicons/android-chrome-192x192.png' %}" alt="You AI Logo" class="greeting-logo">
